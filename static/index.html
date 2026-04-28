@@ -7,9 +7,17 @@
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Learning Failure Lab</h1>
-    <p>Học từ sai lầm tư duy</p>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Learning Analytics Platform</p>
+      <h1>Learning Failure Lab</h1>
+      <p class="subtitle">Học từ sai lầm tư duy để tiến bộ nhanh hơn sau mỗi lần làm bài.</p>
+      <div class="hero-tags">
+        <span>Phân tích lỗi</span>
+        <span>Quiz thông minh</span>
+        <span>Tiến bộ theo dữ liệu</span>
+      </div>
+    </div>
   </header>
 
   <main class="container">
@@ -36,6 +44,7 @@
 
     <section class="card hidden" id="quizSection">
       <h2>Làm bài</h2>
+      <div class="pill">Chọn đáp án để hệ thống phân tích kiểu sai của bạn</div>
       <p id="questionText"></p>
       <div id="options" class="options"></div>
       <button id="btnNext" class="secondary">Câu tiếp</button>
