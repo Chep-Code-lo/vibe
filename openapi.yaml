@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: Learning Failure Lab API
+  version: 0.1.0
+servers:
+  - url: https://api.learning-failure-lab.local
+paths:
+  /api/v1/auth/login:
+    post:
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8 }
+      responses:
+        '200':
+          description: Success
+  /api/v1/sessions:
+    post:
+      summary: Create quiz session
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [topicId]
+              properties:
+                topicId: { type: string, format: uuid }
+      responses:
+        '201':
+          description: Session created
+  /api/v1/sessions/{id}/attempts:
+    post:
+      summary: Submit one attempt
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [questionId, selectedOptionId, latencyMs]
+              properties:
+                questionId: { type: string, format: uuid }
+                selectedOptionId: { type: string, format: uuid }
+                latencyMs: { type: integer, minimum: 0 }
+      responses:
+        '201':
+          description: Attempt saved
+  /api/v1/sessions/{id}/submit:
+    post:
+      summary: Finalize session and analyze errors
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Result generated
+  /api/v1/me/analytics/errors:
+    get:
+      summary: Get user error pattern analytics
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Analytics payload
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
