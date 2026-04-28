@@ -82,13 +82,18 @@ async function loadTopics() {
 async function startQuiz() {
   try {
     const topicId = el('topicSelect').value;
+    const q = await api(`/api/v1/questions?topicId=${encodeURIComponent(topicId)}`);
+    if (!q.data || q.data.length === 0) {
+      setMsg('topicMsg', 'Chủ đề này chưa có câu hỏi. Vui lòng chọn chủ đề khác.');
+      return;
+    }
     const s = await api('/api/v1/sessions', 'POST', { topicId });
     currentSessionId = s.data.sessionId;
-    const q = await api(`/api/v1/questions?topicId=${encodeURIComponent(topicId)}`);
     questions = q.data;
     qIndex = 0;
     quizSection.classList.remove('hidden');
     resultSection.classList.add('hidden');
+    setMsg('topicMsg', '');
     renderQuestion();
   } catch (e) {
     setMsg('topicMsg', e.message);
