@@ -123,6 +123,8 @@ def init_db():
         ]
         cur.executemany("INSERT INTO topics(id,name,description) VALUES(?,?,?)", topics)
         math_topic = topics[0][0]
+        english_topic = topics[1][0]
+        science_topic = topics[2][0]
         qid = str(uuid.uuid4())
         cur.execute("INSERT INTO questions(id,topic_id,content,difficulty) VALUES(?,?,?,?)", (qid, math_topic, "Nếu 2x + 3 = 11 thì x bằng bao nhiêu?", 1))
         opts = [
@@ -142,6 +144,32 @@ def init_db():
             (str(uuid.uuid4()), qid2, "5", 0, "RANDOM_GUESS", "Đoán mò"),
         ]
         cur.executemany("INSERT INTO options(id,question_id,content,is_correct,error_type,error_note) VALUES(?,?,?,?,?,?)", opts2)
+
+        qid3 = str(uuid.uuid4())
+        cur.execute(
+            "INSERT INTO questions(id,topic_id,content,difficulty) VALUES(?,?,?,?)",
+            (qid3, english_topic, "Chọn câu đúng ngữ pháp: She ___ to school every day.", 1),
+        )
+        opts3 = [
+            (str(uuid.uuid4()), qid3, "goes", 1, None, None),
+            (str(uuid.uuid4()), qid3, "go", 0, "MISCONCEPTION", "Sai chia động từ ngôi thứ ba số ít"),
+            (str(uuid.uuid4()), qid3, "going", 0, "CONFUSION", "Nhầm dạng V-ing với thì hiện tại đơn"),
+            (str(uuid.uuid4()), qid3, "gone", 0, "RANDOM_GUESS", "Đoán ngẫu nhiên"),
+        ]
+        cur.executemany("INSERT INTO options(id,question_id,content,is_correct,error_type,error_note) VALUES(?,?,?,?,?,?)", opts3)
+
+        qid4 = str(uuid.uuid4())
+        cur.execute(
+            "INSERT INTO questions(id,topic_id,content,difficulty) VALUES(?,?,?,?)",
+            (qid4, science_topic, "Khí CO2 tăng gây hiệu ứng gì chính trong khí hậu?", 1),
+        )
+        opts4 = [
+            (str(uuid.uuid4()), qid4, "Tăng hiệu ứng nhà kính", 1, None, None),
+            (str(uuid.uuid4()), qid4, "Giảm nhiệt độ Trái Đất ngay lập tức", 0, "MISCONCEPTION", "Hiểu sai cơ chế nhà kính"),
+            (str(uuid.uuid4()), qid4, "Không ảnh hưởng gì đến khí hậu", 0, "LOGIC_GAP", "Bỏ qua quan hệ nguyên nhân-kết quả"),
+            (str(uuid.uuid4()), qid4, "Làm nước biển mặn hơn trực tiếp", 0, "RANDOM_GUESS", "Đoán mò"),
+        ]
+        cur.executemany("INSERT INTO options(id,question_id,content,is_correct,error_type,error_note) VALUES(?,?,?,?,?,?)", opts4)
 
     cur.execute("SELECT COUNT(*) AS c FROM users")
     if cur.fetchone()["c"] == 0:
@@ -361,6 +389,9 @@ class Handler(BaseHTTPRequestHandler):
                 (session_id,),
             ).fetchall()
             total = len(rows)
+            if total == 0:
+                conn.close()
+                return self._json(400, {"error": "No attempts submitted"})
             correct = sum(1 for r in rows if r["is_correct"] == 1)
             errors = {}
             for r in rows:

@@ -26,6 +26,15 @@ python app/main.py
 
 Sau đó mở: `http://localhost:8000`
 
+## Nếu thấy kết quả `total = 0`
+- Nguyên nhân thường do DB cũ được tạo từ phiên bản trước (thiếu câu hỏi cho một số chủ đề).
+- Cách xử lý: tắt server và xóa file DB cũ để app seed lại dữ liệu mới:
+
+```bash
+rm data/learning_failure_lab.db
+python app/main.py
+```
+
 ## Tài khoản mẫu
 - Admin seed sẵn:
   - email: `admin@lab.local`
