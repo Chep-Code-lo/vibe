@@ -1,33 +1,46 @@
-# Learning Failure Lab (Edu)
+# Learning Failure Lab (Web MVP hoàn chỉnh)
 
-Bộ tài liệu triển khai dự án web **Learning Failure Lab** (học từ sai lầm tư duy) theo rubric chấm điểm nghiêm ngặt 100 điểm.
+Ứng dụng web học tập giúp người dùng **học từ sai lầm tư duy** thay vì chỉ đúng/sai.
 
-## Mục tiêu
-- Xây dựng web học tập nơi người học được phân tích sai lầm theo kiểu tư duy (không chỉ đúng/sai).
-- Đảm bảo chất lượng theo 10 tiêu chí: UI/UX, logic ứng dụng, backend/API, database, bảo mật, hiệu năng, vận hành, analytics và chiến lược sản phẩm.
+## Tính năng đã triển khai
+- Đăng ký / đăng nhập (token Bearer).
+- Chọn chủ đề học tập.
+- Làm quiz theo từng câu.
+- Submit phiên học và nhận:
+  - điểm số,
+  - phân tích `errorBreakdown` theo taxonomy (`MISCONCEPTION`, `CONFUSION`, `LOGIC_GAP`, `RANDOM_GUESS`, `OVERCONFIDENCE`).
+- Dashboard analytics cá nhân: các lỗi thường mắc.
+- Backend + DB SQLite tự khởi tạo dữ liệu mẫu.
 
-## Cấu trúc tài liệu
-- `docs/01_prd.md`: PRD + chiến lược sản phẩm + user persona + phạm vi MVP.
-- `docs/02_architecture.md`: kiến trúc hệ thống, module, luồng dữ liệu.
-- `docs/03_backend_api.md`: API spec (REST), quy tắc nghiệp vụ, RBAC.
-- `docs/04_ui_ux.md`: guideline giao diện, trải nghiệm, thông báo/loading.
-- `docs/05_security_performance_ops.md`: security checklist, hiệu năng, CI/CD, backup.
-- `docs/06_demo_checklist.md`: checklist demo và thang tự chấm.
-- `sql/schema.sql`: schema cơ sở dữ liệu chuẩn hóa.
-- `openapi.yaml`: đặc tả API khởi tạo.
+## Cấu trúc
+- `app/main.py`: HTTP server + REST API + auth + business logic.
+- `static/`: frontend HTML/CSS/JS.
+- `data/`: SQLite database runtime.
+- `docs/`: tài liệu kiến trúc/PRD/security/demo.
+- `openapi.yaml`: hợp đồng API khởi tạo.
 
-## Đề xuất stack triển khai
-- Frontend: Next.js + TypeScript + Tailwind + React Query.
-- Backend: NestJS + TypeScript + Prisma.
-- DB: PostgreSQL.
-- Cache/Queue: Redis + BullMQ.
-- Quan sát hệ thống: OpenTelemetry + Grafana/Prometheus.
-- Auth: JWT access/refresh + RBAC.
+## Chạy local
+```bash
+python app/main.py
+```
 
-## Lộ trình 4 sprint (8 tuần)
-1. Sprint 1: Auth + User/Profile + ngân hàng câu hỏi + UI nền tảng.
-2. Sprint 2: Quiz session + engine phân loại lỗi + analytics cá nhân.
-3. Sprint 3: Dashboard GV/Admin + bảo mật + hardening.
-4. Sprint 4: Tối ưu hiệu năng + CI/CD + demo/rehearsal.
+Sau đó mở: `http://localhost:8000`
 
-Xem chi tiết trong từng file docs.
+## Tài khoản mẫu
+- Admin seed sẵn:
+  - email: `admin@lab.local`
+  - password: `Admin123!`
+
+## API chính
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `GET /api/v1/topics`
+- `GET /api/v1/questions?topicId=...`
+- `POST /api/v1/sessions`
+- `POST /api/v1/sessions/:id/attempts`
+- `POST /api/v1/sessions/:id/submit`
+- `GET /api/v1/me/analytics/errors`
+
+## Ghi chú
+- Đây là MVP một service để demo học thuật và bảo vệ đồ án.
+- Có thể mở rộng sang kiến trúc tách frontend/backend, JWT chuẩn, PostgreSQL, Redis, CI/CD đầy đủ như bộ docs đã mô tả.

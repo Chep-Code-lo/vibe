@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learning Failure Lab</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Learning Failure Lab</h1>
+    <p>Học từ sai lầm tư duy</p>
+  </header>
+
+  <main class="container">
+    <section class="card" id="authSection">
+      <h2>Đăng nhập / Đăng ký</h2>
+      <div class="row">
+        <input id="email" placeholder="Email" />
+        <input id="password" type="password" placeholder="Mật khẩu" />
+        <input id="fullName" placeholder="Họ tên (khi đăng ký)" />
+      </div>
+      <div class="row">
+        <button id="btnLogin">Đăng nhập</button>
+        <button id="btnRegister" class="secondary">Đăng ký</button>
+      </div>
+      <p id="authMsg" class="msg"></p>
+    </section>
+
+    <section class="card hidden" id="studySection">
+      <h2>Chọn chủ đề</h2>
+      <select id="topicSelect"></select>
+      <button id="btnStart">Bắt đầu làm bài</button>
+      <p class="msg" id="topicMsg"></p>
+    </section>
+
+    <section class="card hidden" id="quizSection">
+      <h2>Làm bài</h2>
+      <p id="questionText"></p>
+      <div id="options" class="options"></div>
+      <button id="btnNext" class="secondary">Câu tiếp</button>
+      <p class="msg" id="quizMsg"></p>
+    </section>
+
+    <section class="card hidden" id="resultSection">
+      <h2>Kết quả & phân tích lỗi</h2>
+      <pre id="resultBox"></pre>
+      <h3>Lỗi bạn hay mắc</h3>
+      <pre id="analyticsBox"></pre>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
